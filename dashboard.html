@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SIGPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex min-h-screen" onload="verificarLogin()">
+
+    <!-- Menu Lateral -->
+    <aside class="bg-white w-64 min-h-screen shadow-md">
+        <div class="p-4 border-b">
+            <h1 class="text-xl font-semibold text-gray-700 text-center">SIGPS - Admin</h1>
+        </div>
+        <nav class="mt-4">
+            <ul>
+                <li>
+                    <button onclick="mostrarConteudo('cadastrar')" class="w-full text-left px-4 py-2 block text-gray-700 hover:bg-gray-200">
+                        📌 Cadastrar Vestibular
+                    </button>
+                </li>
+                <li>
+                    <button onclick="mostrarConteudo('listar')" class="w-full text-left px-4 py-2 block text-gray-700 hover:bg-gray-200">
+                        📜 Lista de Vestibulares Criados
+                    </button>
+                </li>
+                <li>
+                    <button onclick="logout()" class="w-full text-left px-4 py-2 block text-red-500 hover:bg-red-100">
+                        🚪 Sair
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Área Principal -->
+    <main class="flex-grow p-6">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Painel Administrativo</h2>
+
+        <!-- Seções do conteúdo -->
+        <div id="cadastrar" class="hidden bg-white p-6 rounded shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Cadastrar Vestibular</h3>
+            <p>Aqui você poderá cadastrar um novo vestibular.</p>
+        </div>
+
+        <div id="listar" class="hidden bg-white p-6 rounded shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Lista de Vestibulares Criados</h3>
+            <p>Aqui você poderá ver os vestibulares cadastrados.</p>
+        </div>
+    </main>
+
+    <script>
+        // Verificação de login
+        function verificarLogin() {
+            if (sessionStorage.getItem("logado") !== "true") {
+                alert("Acesso negado! Faça login primeiro.");
+                window.location.href = "login.html";
+            }
+        }
+
+        // Exibir a seção correta do conteúdo
+        function mostrarConteudo(secao) {
+            document.getElementById("cadastrar").classList.add("hidden");
+            document.getElementById("listar").classList.add("hidden");
+            document.getElementById(secao).classList.remove("hidden");
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem("logado");
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>
