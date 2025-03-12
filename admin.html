@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SIGPS Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-center">
+            <h1 class="text-2xl font-semibold text-gray-700">SIGPS</h1>
+        </div>
+        <div class="container mx-auto flex justify-center">
+            <p class="text-gray-600">Sistema Integrado de Processos Seletivos</p>
+        </div>
+    </header>
 
+    <main class="flex-grow flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <h2 class="text-center text-xl font-semibold mb-6">ENTRAR NO SISTEMA</h2>
+            <form onsubmit="return login()">
+                <div class="mb-4">
+                    <label class="block text-gray-700" for="login">Login:</label>
+                    <input class="w-full px-3 py-2 border rounded" id="login" placeholder="Digite seu login" type="text" required/>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700" for="password">Senha:</label>
+                    <input class="w-full px-3 py-2 border rounded" id="password" placeholder="Digite sua senha" type="password" required/>
+                </div>
+                <div class="flex justify-center">
+                    <button class="bg-teal-500 text-white px-4 py-2 rounded" type="submit">Entrar</button>
+                </div>
+                <div class="text-center mt-4">
+                    <a class="text-teal-500" href="#">Cadastre-se</a> |
+                    <a class="text-teal-500" href="#">Esqueceu a senha?</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-white py-4">
+        <div class="container mx-auto text-center">
+            <img alt="UFCA logo" class="mx-auto mb-2" height="30" src="https://storage.googleapis.com/a1aa/image/9S_7yM6QsfjzmoEH1j3f2x4YR0fbcW0rl2uEDLR6d_w.jpg" width="100"/>
+            <p class="text-gray-600">Copyright ©</p>
+        </div>
+    </footer>
+
+    <script>
+        function login() {
+            var user = document.getElementById("login").value;
+            var pass = document.getElementById("password").value;
+
+            if (user === "comvest@comvest.iscm.br" && pass === "comvest") {
+                alert("Login bem-sucedido!");
+                window.location.href = "admin.html"; // Página do painel administrativo
+                return false; // Impede o envio do formulário
+            } else {
+                alert("Login ou senha incorretos.");
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
