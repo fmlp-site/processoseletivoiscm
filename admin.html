@@ -42,8 +42,8 @@
 
     <footer class="bg-white py-4">
         <div class="container mx-auto text-center">
-            
-            <p class="text-gray-600"> ©2025 ISCM-Instituto Superior Ciências Médicas. Todos os direitos reservados</p>
+            <img alt="UFCA logo" class="mx-auto mb-2" height="30" src="https://storage.googleapis.com/a1aa/image/9S_7yM6QsfjzmoEH1j3f2x4YR0fbcW0rl2uEDLR6d_w.jpg" width="100"/>
+            <p class="text-gray-600">Copyright ©</p>
         </div>
     </footer>
 
@@ -54,7 +54,8 @@
 
             if (user === "comvest@comvest.iscm.br" && pass === "comvest") {
                 alert("Login bem-sucedido!");
-                window.location.href = "dashboard.html"; // Página do painel administrativo
+                sessionStorage.setItem("logado", "true"); // Armazena login na sessão
+                window.location.href = "dashboard.html"; // Redireciona para o painel do administrador
                 return false; // Impede o envio do formulário
             } else {
                 alert("Login ou senha incorretos.");
