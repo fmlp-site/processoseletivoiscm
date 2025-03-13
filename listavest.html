@@ -43,6 +43,7 @@
                     <th class="py-2 px-4 border-b">Nome</th>
                     <th class="py-2 px-4 border-b">Data de Início</th>
                     <th class="py-2 px-4 border-b">Data de Término</th>
+                    <th class="py-2 px-4 border-b">Ação</th>
                 </tr>
             </thead>
             <tbody id="listaVestibulares">
@@ -88,6 +89,11 @@
                             <td class="py-2 px-4 border-b">${vestibular.nome}</td>
                             <td class="py-2 px-4 border-b">${vestibular.dataInicio}</td>
                             <td class="py-2 px-4 border-b">${vestibular.dataFim}</td>
+                            <td class="py-2 px-4 border-b">
+                                <a href="gerenciarvestibular.html?id=${vestibular.objectId}" class="text-teal-500 hover:underline">
+                                    Gerenciar
+                                </a>
+                            </td>
                         `;
 
                         listaVestibulares.appendChild(tr);
