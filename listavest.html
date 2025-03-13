@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Vestibulares - SIGPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen" onload="verificarLogin()">
+
+    <!-- Menu Lateral -->
+    <aside class="bg-white w-64 min-h-screen shadow-md">
+        <div class="p-4 border-b">
+            <h1 class="text-xl font-semibold text-gray-700 text-center">SIGPS - Admin</h1>
+        </div>
+        <nav class="mt-4">
+            <ul>
+                <li>
+                    <a href="dashboard.html" class="w-full text-left px-4 py-2 block text-gray-700 hover:bg-gray-200">
+                        🏠 Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="cadastrovest.html" class="w-full text-left px-4 py-2 block text-gray-700 hover:bg-gray-200">
+                        ➕ Cadastrar Vestibular
+                    </a>
+                </li>
+                <li>
+                    <button onclick="logout()" class="w-full text-left px-4 py-2 block text-red-500 hover:bg-red-100">
+                        🚪 Sair
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Área Principal -->
+    <main class="flex-grow p-6">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Lista de Vestibulares</h2>
+        <table class="min-w-full bg-white border border-gray-300 rounded shadow-md">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="py-2 px-4 border-b">Nome</th>
+                    <th class="py-2 px-4 border-b">Data de Início</th>
+                    <th class="py-2 px-4 border-b">Data de Término</th>
+                </tr>
+            </thead>
+            <tbody id="listaVestibulares">
+                <!-- Os vestibulares cadastrados aparecerão aqui -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Configuração do Backendless
+        const APP_ID = "1D06C66C-19D2-46A5-8A4F-03416B4A3211";
+        const API_KEY = "3B0EE497-CA64-4752-8D3E-33B598D71A49";
+        const URL = `https://api.backendless.com/${APP_ID}/${API_KEY}/data/Vestibulares`;
+
+        // Verificação de login
+        function verificarLogin() {
+            if (sessionStorage.getItem("logado") !== "true") {
+                alert("Acesso negado! Faça login primeiro.");
+                window.location.href = "login.html";
+            } else {
+                carregarVestibulares();
+            }
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem("logado");
+            window.location.href = "login.html";
+        }
+
+        // Carregar Vestibulares
+        function carregarVestibulares() {
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    const listaVestibulares = document.getElementById("listaVestibulares");
+                    listaVestibulares.innerHTML = ""; // Limpa a lista antes de preencher
+
+                    data.forEach(vestibular => {
+                        const tr = document.createElement("tr");
+
+                        tr.innerHTML = `
+                            <td class="py-2 px-4 border-b">${vestibular.nome}</td>
+                            <td class="py-2 px-4 border-b">${vestibular.dataInicio}</td>
+                            <td class="py-2 px-4 border-b">${vestibular.dataFim}</td>
+                        `;
+
+                        listaVestibulares.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error("Erro ao carregar vestibulares:", error));
+        }
+    </script>
+
+</body>
+</html>
