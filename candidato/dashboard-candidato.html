@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Candidato - SIGPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex">
+
+    <!-- Menu Lateral -->
+    <aside class="bg-white w-64 min-h-screen shadow-md">
+        <div class="p-4 border-b text-center">
+            <h1 class="text-xl font-semibold text-gray-700">SIGPS - Candidato</h1>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-600 font-semibold">Bem-vindo,</p>
+            <p id="nomeCandidato" class="text-gray-800 text-lg font-bold"></p>
+            <p id="cpfCandidato" class="text-gray-600 text-sm"></p>
+        </div>
+        <nav class="mt-4">
+            <a href="inscricao.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">📝 Inscrição</a>
+            <a href="recursos.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">📄 Recursos</a>
+        </nav>
+    </aside>
+
+    <!-- Área Principal -->
+    <main class="flex-grow p-6">
+        <h2 class="text-2xl font-semibold text-gray-700">Painel do Candidato</h2>
+        <p class="text-gray-600 mt-2">Aqui você pode gerenciar suas inscrições e recursos.</p>
+    </main>
+
+    <script>
+        const APP_ID = "SEU_APP_ID";
+        const API_KEY = "SUA_API_KEY";
+        const URL_CANDIDATOS = `https://api.backendless.com/${APP_ID}/${API_KEY}/data/Candidatos`;
+
+        // Verifica se o candidato está logado
+        const emailLogado = sessionStorage.getItem("emailCandidato");
+        if (!emailLogado) {
+            window.location.href = "login-candidato.html"; // Redireciona para o login se não estiver logado
+        }
+
+        // Busca os dados do candidato logado
+        fetch(`${URL_CANDIDATOS}?where=email='${emailLogado}'`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    document.getElementById("nomeCandidato").innerText = data[0].nome;
+                    document.getElementById("cpfCandidato").innerText = `CPF: ${data[0].cpf}`;
+                } else {
+                    alert("Erro ao carregar dados do candidato.");
+                    window.location.href = "login-candidato.html";
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao buscar candidato:", error);
+                alert("Erro ao carregar dados.");
+            });
+    </script>
+
+</body>
+</html>
