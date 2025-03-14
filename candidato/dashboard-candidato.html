@@ -6,57 +6,47 @@
     <title>Dashboard do Candidato - SIGPS</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex">
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    
+    <div class="flex flex-grow">
+        <!-- Menu Lateral -->
+        <aside class="bg-white w-64 p-6 shadow-md">
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-700">Bem-vindo!</h2>
+                <p id="nomeCandidato" class="text-gray-600">Carregando...</p>
+                <p id="cpfCandidato" class="text-gray-500 text-sm">Carregando...</p>
+            </div>
+            <nav>
+                <ul>
+                    <li class="mb-4">
+                        <a href="inscricao.html" class="block bg-teal-500 text-white px-4 py-2 rounded text-center">Inscrição</a>
+                    </li>
+                    <li>
+                        <a href="recursos.html" class="block bg-teal-500 text-white px-4 py-2 rounded text-center">Recursos</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-    <!-- Menu Lateral -->
-    <aside class="bg-white w-64 min-h-screen shadow-md">
-        <div class="p-4 border-b text-center">
-            <h1 class="text-xl font-semibold text-gray-700">SIGPS - Candidato</h1>
-        </div>
-        <div class="p-4">
-            <p class="text-gray-600 font-semibold">Bem-vindo,</p>
-            <p id="nomeCandidato" class="text-gray-800 text-lg font-bold"></p>
-            <p id="cpfCandidato" class="text-gray-600 text-sm"></p>
-        </div>
-        <nav class="mt-4">
-            <a href="inscricao.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">📝 Inscrição</a>
-            <a href="recursos.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">📄 Recursos</a>
-        </nav>
-    </aside>
-
-    <!-- Área Principal -->
-    <main class="flex-grow p-6">
-        <h2 class="text-2xl font-semibold text-gray-700">Painel do Candidato</h2>
-        <p class="text-gray-600 mt-2">Aqui você pode gerenciar suas inscrições e recursos.</p>
-    </main>
+        <!-- Conteúdo Principal -->
+        <main class="flex-grow p-8">
+            <h1 class="text-2xl font-semibold text-gray-700">Painel do Candidato</h1>
+            <p class="text-gray-600">Selecione uma opção no menu ao lado.</p>
+        </main>
+    </div>
 
     <script>
-        const APP_ID = "SEU_APP_ID";
-        const API_KEY = "SUA_API_KEY";
-        const URL_CANDIDATOS = `https://api.backendless.com/${1D06C66C-19D2-46A5-8A4F-03416B4A3211}/${3B0EE497-CA64-4752-8D3E-33B598D71A49}/data/Candidatocadastro`;
+        // Recupera os dados do candidato salvos no sessionStorage
+        const nome = sessionStorage.getItem("nomeCandidato");
+        const cpf = sessionStorage.getItem("cpfCandidato");
 
-        // Verifica se o candidato está logado
-        const emailLogado = sessionStorage.getItem("emailCandidato");
-        if (!emailLogado) {
-            window.location.href = "login-candidato.html"; // Redireciona para o login se não estiver logado
+        if (nome && cpf) {
+            document.getElementById("nomeCandidato").textContent = nome;
+            document.getElementById("cpfCandidato").textContent = `CPF: ${cpf}`;
+        } else {
+            document.getElementById("nomeCandidato").textContent = "Erro ao carregar nome";
+            document.getElementById("cpfCandidato").textContent = "Erro ao carregar CPF";
         }
-
-        // Busca os dados do candidato logado
-        fetch(`${URL_CANDIDATOS}?where=email='${emailLogado}'`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    document.getElementById("nomeCandidato").innerText = data[0].nome;
-                    document.getElementById("cpfCandidato").innerText = `CPF: ${data[0].cpf}`;
-                } else {
-                    alert("Erro ao carregar dados do candidato.");
-                    window.location.href = "login-candidato.html";
-                }
-            })
-            .catch(error => {
-                console.error("Erro ao buscar candidato:", error);
-                alert("Erro ao carregar dados.");
-            });
     </script>
 
 </body>
