@@ -3,50 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard do Candidato - SIGPS</title>
+    <title>Dashboard Candidato</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
-    
-    <div class="flex flex-grow">
-        <!-- Menu Lateral -->
-        <aside class="bg-white w-64 p-6 shadow-md">
-            <div class="text-center mb-6">
-                <h2 class="text-xl font-semibold text-gray-700">Bem-vindo!</h2>
-                <p id="nomeCandidato" class="text-gray-600">Carregando...</p>
-                <p id="cpfCandidato" class="text-gray-500 text-sm">Carregando...</p>
-            </div>
-            <nav>
-                <ul>
-                    <li class="mb-4">
-                        <a href="inscricao.html" class="block bg-teal-500 text-white px-4 py-2 rounded text-center">Inscrição</a>
-                    </li>
-                    <li>
-                        <a href="recursos.html" class="block bg-teal-500 text-white px-4 py-2 rounded text-center">Recursos</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+<body class="bg-gray-100 flex min-h-screen">
 
-        <!-- Conteúdo Principal -->
-        <main class="flex-grow p-8">
-            <h1 class="text-2xl font-semibold text-gray-700">Painel do Candidato</h1>
-            <p class="text-gray-600">Selecione uma opção no menu ao lado.</p>
-        </main>
-    </div>
+    <!-- Menu Lateral -->
+    <aside class="bg-white w-64 p-6 shadow-md">
+        <div class="text-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-700">Painel do Candidato</h2>
+        </div>
+        
+        <!-- Nome e CPF do candidato -->
+        <div class="mb-6">
+            <p class="text-gray-700"><strong>Nome:</strong> <span id="nomeCandidato">Carregando...</span></p>
+            <p class="text-gray-700"><strong>CPF:</strong> <span id="cpfCandidato">Carregando...</span></p>
+        </div>
+
+        <nav>
+            <ul>
+                <li class="mb-4">
+                    <a href="inscricao.html" class="block bg-teal-500 text-white px-4 py-2 rounded text-center">Inscrição</a>
+                </li>
+                <li class="mb-4">
+                    <a href="recursos.html" class="block bg-teal-500 text-white px-4 py-2 rounded text-center">Recursos</a>
+                </li>
+                <li class="mb-4">
+                    <a href="logout.html" class="block bg-red-500 text-white px-4 py-2 rounded text-center">Sair</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow p-8">
+        <h1 class="text-2xl font-semibold text-gray-700 mb-6">Bem-vindo(a), <span id="nomeTitulo">Candidato</span></h1>
+        <p class="text-gray-600">Aqui você pode gerenciar sua inscrição e acessar recursos.</p>
+    </main>
 
     <script>
-        // Recupera os dados do candidato salvos no sessionStorage
-        const nome = sessionStorage.getItem("nomeCandidato");
-        const cpf = sessionStorage.getItem("cpfCandidato");
+        const API_BASE_URL = "https://api.backendless.com/1D06C66C-19D2-46A5-8A4F-03416B4A3211/3B0EE497-CA64-4752-8D3E-33B598D71A49/Candidatocadastro"; // Substitua pelo seu Backendless
+        const sessionToken = localStorage.getItem("sessionToken"); // Recupera o token salvo no login
+        const userId = localStorage.getItem("userId"); // ID do usuário logado
 
-        if (nome && cpf) {
-            document.getElementById("nomeCandidato").textContent = nome;
-            document.getElementById("cpfCandidato").textContent = `CPF: ${cpf}`;
-        } else {
-            document.getElementById("nomeCandidato").textContent = "Erro ao carregar nome";
-            document.getElementById("cpfCandidato").textContent = "Erro ao carregar CPF";
+        if (!sessionToken || !userId) {
+            window.location.href = "login-candidato.html"; // Redireciona para login se não estiver autenticado
         }
+
+        async function carregarDadosCandidato() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/Candidatos/${userId}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "user-token": sessionToken // Autenticação via token de sessão
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar dados do candidato.");
+                }
+
+                const candidato = await response.json();
+
+                // Exibir nome e CPF no menu e na saudação
+                document.getElementById("nomeCandidato").textContent = candidato.nome;
+                document.getElementById("cpfCandidato").textContent = candidato.cpf;
+                document.getElementById("nomeTitulo").textContent = candidato.nome;
+
+            } catch (error) {
+                console.error("Erro ao carregar candidato:", error);
+                alert("Erro ao carregar dados do candidato. Faça login novamente.");
+                localStorage.clear();
+                window.location.href = "login-candidato.html";
+            }
+        }
+
+        window.onload = carregarDadosCandidato;
     </script>
 
 </body>
