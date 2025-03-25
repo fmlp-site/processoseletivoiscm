@@ -52,7 +52,7 @@
 
         async function carregarDadosCandidato() {
             try {
-                const response = await fetch(`${API_BASE_URL}/Candidatos/${userId}`, {
+                const response = await fetch(`${API_BASE_URL}/Candidatocadastro/${userId}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "user-token": sessionToken // Autenticação via token de sessão
