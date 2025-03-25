@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Inscrição</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        small {
+            display: block;
+            margin-bottom: 10px;
+            color: #6c757d;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .resultado {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Consulta de Inscrição</h2>
+        <form id="consultaForm">
+            <label for="cpf">CPF <span style="color: red;">*</span></label>
+            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+            <small>Informe o seu CPF com os pontos (.) e o traço (-)</small>
+            <button type="submit">Consultar</button>
+        </form>
+        <div id="resultado" class="resultado"></div>
+    </div>
+
+    <script>
+        document.getElementById("consultaForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let cpf = document.getElementById("cpf").value.trim();
+
+            if (cpf === "") {
+                alert("Por favor, informe o CPF.");
+                return;
+            }
+
+            // Backendless API URL (substitua pela sua API real)
+            const APP_ID = "1D06C66C-19D2-46A5-8A4F-03416B4A3211";
+            const API_KEY = 3B0EE497-CA64-4752-8D3E-33B598D71A49";
+            const URL = `https://api.backendless.com/${APP_ID}/${API_KEY}/data/Candidatocadastro?where=cpf%3D'${cpf}'`;
+
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        let candidato = data[0];
+                        document.getElementById("resultado").style.display = "block";
+                        document.getElementById("resultado").innerHTML = `
+                            <strong>Nome:</strong> ${candidato.nome} <br>
+                            <strong>Data de Nascimento:</strong> ${candidato.dataNascimento} <br>
+                            <strong>Status da Inscrição:</strong> ${candidato.statusInscricao} 
+                        `;
+                    } else {
+                        document.getElementById("resultado").style.display = "block";
+                        document.getElementById("resultado").innerHTML = "<strong>Nenhum candidato encontrado com este CPF.</strong>";
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro na consulta:", error);
+                    alert("Erro ao consultar. Verifique a conexão com o servidor.");
+                });
+        });
+    </script>
+
+</body>
+</html>
